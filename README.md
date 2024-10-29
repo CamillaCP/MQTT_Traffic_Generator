@@ -44,4 +44,16 @@ These options only apply when _Role_ is set to **Subscriber**.
 - _Topic_: The MQTT Topic Filter to which the subscriber will listen for any incoming message.
 - _QoS_: The level of Quality of Service (i.e., 0, 1, or 2) for the message received on the given topic.
 
+### Example Configuration (CSV)
+
+Below is an example of a CSV configuration file for **Manual Configuration Mode**:
+
+| Role       | Topic           | QoS | Payload         | Type     | Period | MinRange | MaxRange | Distribution | DeviceType | HiddenMessage | EmbeddingMethod |
+|------------|------------------|-----|-----------------|----------|--------|----------|----------|--------------|------------|---------------|-----------------|
+| publisher  | home/kitchen/temperature    | 1   | {"temp":22.5}  | periodic | 10      |          |          |              | legit      |               |                 |
+| publisher  | home/garden/motion | 0   | {"motion":yes} | event    |        | 2        | 8        | normal       |  |      |             |
+| subscriber | home/kitchen/temperature     | 1   |                 |          |        |          |          |              |            |               |                 |
+| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |
+
+
 
