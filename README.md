@@ -56,4 +56,38 @@ Below is an example of a CSV configuration file for **Manual Configuration Mode*
 | publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |
 
 
+## Usage
+
+The traffic generator can be used through the graphical user interface or by running it directly from the command line.
+
+### Option 1: Using the UI
+
+The `ui_generator.py` script allows for interactive configuration of the MQTT traffic generation parameters. These configurations are saved to a CSV file, and the generation process can be directly started and stopped through the relative buttons. 
+
+To launch the UI:
+```
+$ python3 ui_generator.py
+```
+
+### Option 2: Running the Traffic Generator via Command Line
+
+The `generator.py` script can alternatively be used directly from the comman line, either using a CSV configuration file or replaying traffic from a PCAP file. 
+
+To generate traffic using a CSV configuration file:
+```
+$ python3 generator.py [-h HELP] [--csv CSV]
+```
+where ```--csv CSV```  specifies the path to the CSV file to use for traffic simulation.
+
+To replay traffic based on an empirical distribution using a PCAP traffic capture:
+```
+$ python3 generator.py [-h HELP] [--pcap PCAP]
+```
+where ```--pcap PCAP```  specifies the path to the PCAP file to use for traffic replay.
+
+
+
+
+
+
 
