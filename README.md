@@ -14,3 +14,34 @@ This project is an MQTT (Message Queuing Telemetry Transport) traffic generator 
 - _Simulation of Counterfeit Nodes for Covert Channels_: Embed hidden messages within MQTT topic names using two distinct covert channel techniques, namely the modulation of the letter casing or the insertion of a counterfeit ID.
 - _Support for Both Event-Driven and Periodic Publishing_: Set publishing intervals for event-driven or periodic messages, with customizable delay distributions (i.e., uniform, exponential, and normal).
 - _Traffic Capture_: Automatically captures all generated traffic using `tshark` and saves it to a PCAP file.
+
+## Configuration Options
+
+The following options can be defined and saved in a CSV file through the UI. The saved configurations are used by the generator to simulate or replay MQTT traffic.
+
+### General Options
+- _Mode_: The mode of operation for the tool. As mentioned, the available modes are:
+  - **Manual Configuration**
+  - **Empirical Distribution Mode**, that only requires the specification of the path of the PCAP file containing the previously captured MQTT traffic.
+- _Role_: The role of the MQTT client. The options are:
+  - **Publisher**: Sends messages to a specified topic.
+  - **Subscriber**: Listens to a specified topic for incoming messages.
+ 
+### Publisher-specific Options
+These options only apply when _Role_ is set to **Publisher**.
+- _Topic_: The MQTT Topic Name where messages will be published.
+- _QoS_: The level of Quality of Service (i.e., 0, 1, or 2) for the message published on the given topic.
+- _Payload_: The message content that the publisher will send to the topic.
+- _Type_: The publishig behavior of the publisher, that can be chosen between:
+  - **Periodic**: Messages are sent at regular intervals specified by the _Period_ option. 
+  - **Event**: Messages are sent at randomized intervals between the specified _MinRange_ and _MaxRange_ time intervals, determined by the probability distribution specified in the _Distribution_ setting (i.e., uniform, exponential, or normal).
+- _DeviceType_: Specifies the type of device generating the traffic. The options are:
+  - **Legit**: A regular, non-counterfeit MQTT client.
+  - **Counterfeit** : A compromised client embedding covert messages within MQTT topic names. If the current client is counterfeit, the _HiddenMessage_ to embed within the topic name and the _EmbeddingMethod_ to exploit must also be specified. The two currently supported methods for secret message embedding are **Case**, that encodes the covert message by changing the letter casing of the first letter of the last level of the topic, and **ID**, that appends a numeric identifier based on the covert message bits to the last level of the topic name.
+ 
+### Subscriber-specific Options
+These options only apply when _Role_ is set to **Subscriber**.
+- _Topic_: The MQTT Topic Filter to which the subscriber will listen for any incoming message.
+- _QoS_: The level of Quality of Service (i.e., 0, 1, or 2) for the message received on the given topic.
+
+
