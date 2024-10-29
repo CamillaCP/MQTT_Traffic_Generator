@@ -56,6 +56,20 @@ Below is an example of a CSV configuration file for **Manual Configuration Mode*
 | publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |
 
 
+## Dependencies
+
+The following libraries are needed to run the MQTT traffic generator.
+
+- Scapy: ``` pip3 install scapy ```
+- Numpy: ``` pip3 install numpy ```
+- Pandas: ``` pip3 install pandas ```
+- Paho-MQTT: ``` pip3 install paho-mqtt ```
+
+**Note**: Additionally, `tshark` is required for capturing network traffic. Install `tshark` separately:
+```
+$ sudo apt-get install tshark
+```
+
 ## Usage
 
 The traffic generator can be used through the graphical user interface or by running it directly from the command line.
