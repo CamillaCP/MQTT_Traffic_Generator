@@ -317,7 +317,7 @@ if __name__ == "__main__":
         if not os.path.exists(args.csv):
             print(f"CSV file '{args.csv}' not found.")
             exit(1)
-        data = pd.read_csv(args.csv)
+        data = pd.read_csv(args.csv).fillna({'EmbeddingMethod': 'case'})
         start_publishers_and_subscribers(data)
 
     elif args.pcap:
