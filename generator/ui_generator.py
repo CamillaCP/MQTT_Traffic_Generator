@@ -113,18 +113,18 @@ def add_config():
     if validate_inputs():
         # Create a dictionary with the configuration values, converting key names to lowercase
         config = {
-            "topic": topic_var.get(),
-            "type": type_var.get().lower() if role_var.get().lower() == 'publisher' else None,
-            "qos": qos_var.get(),
-            "period": period_var.get() if type_var.get().lower() == 'periodic' else None,
-            "minrange": min_range_var.get() if type_var.get().lower() == 'event' else None,
-            "maxrange": max_range_var.get() if type_var.get().lower() == 'event' else None,
-            "payload": payload_var.get(),
-            "distribution": distribution_var.get().lower() if type_var.get().lower() == 'event' else None,
-            "devicetype": device_type_var.get().lower() if role_var.get().lower() == 'publisher' else None,
-            "hiddenmessage": hidden_message_var.get() if device_type_var.get().lower() == 'counterfeit' else None,
-            "embeddingmethod": embedding_method_var.get().lower() if device_type_var.get().lower() == 'counterfeit' else None,
-            "role": role_var.get().lower()
+            "Topic": topic_var.get(),
+            "Type": type_var.get().lower() if role_var.get().lower() == 'publisher' else None,
+            "QoS": qos_var.get(),
+            "Period": period_var.get() if type_var.get().lower() == 'periodic' else None,
+            "MinRange": min_range_var.get() if type_var.get().lower() == 'event' else None,
+            "MaxRange": max_range_var.get() if type_var.get().lower() == 'event' else None,
+            "Payload": payload_var.get(),
+            "Distribution": distribution_var.get().lower() if type_var.get().lower() == 'event' else None,
+            "DeviceType": device_type_var.get().lower() if role_var.get().lower() == 'publisher' else None,
+            "HiddenMessage": hidden_message_var.get() if device_type_var.get().lower() == 'counterfeit' else None,
+            "EmbeddingMethod": embedding_method_var.get().lower() if device_type_var.get().lower() == 'counterfeit' else None,
+            "Role": role_var.get().lower()
         }
         # Add the configuration to the configurations list
         configs.append(config)
