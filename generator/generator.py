@@ -13,8 +13,9 @@ import subprocess
 from scapy.all import *
 from scapy.contrib.mqtt import MQTT, MQTTPublish, MQTTConnect, MQTTSubscribe, MQTTDisconnect
 
+
 # MQTT Broker settings, including broker address and port number
-broker_address = 'test.mosquitto.org'
+broker_address = '127.0.0.1'
 port = 1883
 client_lock = threading.Lock() # Lock for safe access to MQTT clients in multi-threading
 running = True  # Global flag to indicate whether the application is running
@@ -212,20 +213,57 @@ def start_publishers_and_subscribers(data):
     """Start publishers and subscribers based on the provided CSV data."""
     for index, row in data.iterrows():
         role = row['Role'].strip().lower()
-        topic = row['Topic']
-        qos = int(row['QoS']) if pd.notna(row['QoS']) else 0
+        if role == 'dos_attack':
+            start_dos_attack(row)
+        else:
+            topic = row['Topic']
+            qos = int(row['QoS']) if pd.notna(row['QoS']) else 0
 
-        # Start a new MQTT client for each row in the CSV
-        client_id = f"client_{index}"
-        client = start_mqtt_client(client_id)  # Create and start a new MQTT client
+            # Start a new MQTT client for each row in the CSV
+            client_id = f"client_{index}"
+            client = start_mqtt_client(client_id)  # Create and start a new MQTT client
 
-        if role == 'publisher':
-            if row['Type'] == 'periodic':
-                threading.Thread(target=periodic_publisher, args=(client, row)).start()
-            elif row['Type'] == 'event':
-                threading.Thread(target=event_publisher, args=(client, row)).start()
-        elif role == 'subscriber':
-            subscribe_to_topic(client, topic, qos)
+            if role == 'publisher':
+                if row['Type'] == 'periodic':
+                    threading.Thread(target=periodic_publisher, args=(client, row)).start()
+                elif row['Type'] == 'event':
+                    threading.Thread(target=event_publisher, args=(client, row)).start()
+            elif role == 'subscriber':
+                subscribe_to_topic(client, topic, qos)
+
+
+def start_dos_attack(row):
+    """Function to handle the generation of high-frequency traffic to simulate a DoS attack."""
+    # Number of clients for the DoS simulation, defaulting to 1 if not specified
+    num_clients = int(row['NumClients']) if pd.notna(row['NumClients']) else 1
+    topic = row['Topic']
+    qos = int(row['QoS'])
+    payload = row['Payload']
+    # Set the interval (in seconds) between each message publish by each client, if not specified, default to 1 sec
+    publish_interval = float(row['Period']) if pd.notna(row['Period']) else 1
+    # Set the total duration (in seconds) for the DoS attack, after this duration clients will stop publishing messages
+    duration = float(row['Duration']) if pd.notna(row['Duration']) else 10
+    end_time = time.time() + duration # End time for the DoS attack based on the current time and the duration
+
+    # Function to be executed by each DoS client thread
+    def attack_client(client_id):
+        """Function to handle the message publishing for a single DoS client.
+        Each client will repeatedly publish messages to the specified topic
+        until the end time is reached or the global 'running' flag is set to False.
+        """
+        client = start_mqtt_client(client_id)
+
+        # Keep publishing messages until the end time is reached or 'running' is set to False
+        while running and time.time() < end_time:
+            publish_message(client, topic, qos, payload)
+            time.sleep(publish_interval)
+
+    # Spawn multiple threads for each DoS client based on 'num_clients' to simulate concurrent traffic
+    for i in range(num_clients):
+        # Each thread runs the 'attack_client' function with a unique client ID.
+        threading.Thread(target=attack_client, args=(f"dos_client_{i}",)).start()
+    print(
+        f"Started DoS attack wih {num_clients} clients on topic '{topic}' every {publish_interval} seconds for {duration} seconds.")
 
 
 def replay_pcap(file_path):
