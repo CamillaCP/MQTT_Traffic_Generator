@@ -1,6 +1,6 @@
 # MQTT-traffic-generator 
 
-This project is an MQTT (Message Queuing Telemetry Transport) traffic generator with two main modes of operation, namely **Manual Configuration** and **Empirical Distribution Mode**, that also supports the establishment of network covert channels exploiting MQTT topic names. 
+This project is an MQTT (Message Queuing Telemetry Transport) traffic generator with two main modes of operation, namely **Manual Configuration** and **Empirical Distribution Mode**, that also supports the establishment of network covert channels exploiting MQTT topic names and the simulation of DoS (Denial of Service) attacks towards the MQTT broker. 
 
 ## Modes of Operation
 
@@ -11,7 +11,7 @@ This project is an MQTT (Message Queuing Telemetry Transport) traffic generator 
 ## Features
 
 - _UI for Custom Configuration_: Define and save MQTT traffic configurations through a graphical interface, with access to both modes of operation. This allows users to configure MQTT traffic parameters directly, as well as specifying the existing PCAP file for traffic replay.
-- _Simulation of Counterfeit Nodes for Covert Channels_: Embed hidden messages within MQTT topic names using two distinct covert channel techniques, namely the modulation of the letter casing or the insertion of a counterfeit ID.
+- _Simulation of Counterfeit Nodes_: Embed hidden messages within MQTT topic names using two distinct covert channel techniques, namely the modulation of the letter casing or the insertion of a counterfeit ID, as well as the possibility to simulate a DoS attack targeting the MQTT broker.
 - _Support for Both Event-Driven and Periodic Publishing_: Set publishing intervals for event-driven or periodic messages, with customizable delay distributions (i.e., uniform, exponential, and normal).
 - _Traffic Capture_: Automatically captures all generated traffic using `tshark` and saves it to a PCAP file.
 
@@ -26,6 +26,7 @@ The following options can be defined and saved in a CSV file through the UI. The
 - _Role_: The role of the MQTT client. The options are:
   - **Publisher**: Sends messages to a specified topic.
   - **Subscriber**: Listens to a specified topic for incoming messages.
+  - **DoS_Attack**: Allows for the simulation of a DoS attack through the instantiation of a large number of Publisher nodes. 
  
 ### Publisher-specific Options
 These options only apply when _Role_ is set to **Publisher**.
@@ -44,16 +45,28 @@ These options only apply when _Role_ is set to **Subscriber**.
 - _Topic_: The MQTT Topic Filter to which the subscriber will listen for any incoming message.
 - _QoS_: The level of Quality of Service (i.e., 0, 1, or 2) for the message received on the given topic.
 
+### DoS_Attack-specific Options
+These options only apply when _Role_ is set to **DoS_Attack**.
+- _Topic_: The MQTT Topic Name that will be used by the Publisher devices.
+- _QoS_: The level of Quality of Service (i.e., 0, 1, or 2) for the messages that will be published on the given topic.
+- _Payload_: The message content that the set of Publisher nodes will send to the topic.
+- _Type_: The publishig behavior of the nodes, that is set to **Periodic** for this role, as messages will be sent at regular intervals specified by the _Period_ option.
+- _NumClients_: The number of Publisher devices to be instantiated to realize the DoS attack simulation.
+- _Duration_: The duration of the DoS attack. 
+
 ### Example Configuration (CSV)
 
 Below is an example of a CSV configuration file for **Manual Configuration Mode**:
 
-| Role       | Topic           | QoS | Payload         | Type     | Period | MinRange | MaxRange | Distribution | DeviceType | HiddenMessage | EmbeddingMethod |
-|------------|------------------|-----|-----------------|----------|--------|----------|----------|--------------|------------|---------------|-----------------|
-| publisher  | home/kitchen/temperature    | 1   | {"temp":22.5}  | periodic | 10      |          |          |              | legit      |               |                 |
+| Role       | Topic           | QoS | Payload         | Type     | Period | MinRange | MaxRange | Distribution | DeviceType | HiddenMessage | EmbeddingMethod | NumClients | Duration | 
+|------------|------------------|-----|-----------------|----------|--------|----------|----------|--------------|------------|---------------|-----------------|----------|----------|
+| publisher  | home/kitchen/temperature    | 1   | {"temp":22.5}  | periodic | 10      |          |          |              | legit      |               |                 |         |                |
 | publisher  | home/garden/motion | 0   | {"motion":yes} | event    |        | 2        | 8        | normal       |  |      |             |
 | subscriber | home/kitchen/temperature     | 1   |                 |          |        |          |          |              |            |               |                 |
-| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |
+| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                |
+| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                |
+| dos_attack  | home/garden/light  | 2   | {"light_status": off}  | periodic | 0.05      |          |          |              | counterfeit      |              |                 |  500      |       10         |
+
 
 
 ## Dependencies
