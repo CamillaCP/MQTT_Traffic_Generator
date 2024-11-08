@@ -58,14 +58,14 @@ These options only apply when _Role_ is set to **DoS_Attack**.
 
 Below is an example of a CSV configuration file for **Manual Configuration Mode**:
 
-| Role       | Topic           | QoS | Payload         | Type     | Period | MinRange | MaxRange | Distribution | DeviceType | HiddenMessage | EmbeddingMethod | NumClients | Duration | 
-|------------|------------------|-----|-----------------|----------|--------|----------|----------|--------------|------------|---------------|-----------------|----------|----------|
-| publisher  | home/kitchen/temperature    | 1   | {"temp":22.5}  | periodic | 10      |          |          |              | legit      |               |                 |         |                |
-| publisher  | home/garden/motion | 0   | {"motion":yes} | event    |        | 2        | 8        | normal       |  |      |             |
-| subscriber | home/kitchen/temperature     | 1   |                 |          |        |          |          |              |            |               |                 |
-| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                |
-| publisher  | home/kitchen/humidity    | 2   | {"humidity":25.5%}  | periodic | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                |
-| dos_attack  | home/garden/light  | 2   | {"light_status": off}  | periodic | 0.05      |          |          |              | counterfeit      |              |                 |  500      |       10         |
+| Topic           | Type     | QoS | Payload   | Period | MinRange | MaxRange | Distribution | DeviceType | HiddenMessage | EmbeddingMethod | NumClients | Duration | Role |      
+|------------------|---------|-----|-----------------|--------|----------|----------|--------------|------------|---------------|-----------------|----------|----------|------------|
+| home/kitchen/temperature    |  periodic | 1   | {"temp":22.5}  | 10      |          |          |              | legit      |               |                 |         |                | publisher |
+| home/garden/motion | event | 0   | {"motion":yes} | 2        | 8        | normal       |  |      |             |                |         |    publisher        |
+| home/kitchen/temperature   |   | 1   |                 |         |          |          |              |            |               |                 | subscriber  |
+| home/kitchen/humidity    | periodic | 2   | {"humidity":25.5%} | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                | publisher  |
+| home/kitchen/humidity    | periodic | 2   | {"humidity":25.5%} | 4      |          |          |              | counterfeit      |   secret            |    case             |        |                | publisher  
+| home/garden/light  | periodic | 2   | {"light_status": off} | 0.05      |          |          |              | counterfeit      |              |                 |  500      |       10         | dos_attack  | 
 
 
 
