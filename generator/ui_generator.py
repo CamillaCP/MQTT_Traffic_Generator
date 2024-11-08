@@ -46,7 +46,7 @@ def run_generator():
     if csv_file_path and os.path.exists(csv_file_path):
         try:
             # Start the generator process using the CSV file as input
-            generator_process = subprocess.Popen(['python3', 'generator_dos.py', '--csv', csv_file_path],
+            generator_process = subprocess.Popen(['python3', 'generator.py', '--csv', csv_file_path],
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
             messagebox.showinfo("Info", f"Generator started with CSV: {csv_file_path}")
             # Enable the Stop button, that is otherwise disabled if no generation process has started
@@ -58,7 +58,7 @@ def run_generator():
     elif pcap_file_path and os.path.exists(pcap_file_path):
         try:
             # Start the generator process using the CSV file as input
-            generator_process = subprocess.Popen(['python3', 'generator_dos.py', '--pcap', pcap_file_path],
+            generator_process = subprocess.Popen(['python3', 'generator.py', '--pcap', pcap_file_path],
                                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
             messagebox.showinfo("Info", f"Generator started with PCAP: {pcap_file_path}")
             # Enable the Stop button, that is otherwise disabled if no generation process has started

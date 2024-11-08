@@ -15,7 +15,7 @@ from scapy.contrib.mqtt import MQTT, MQTTPublish, MQTTConnect, MQTTSubscribe, MQ
 
 
 # MQTT Broker settings, including broker address and port number
-broker_address = '127.0.0.1'
+broker_address = 'test.mosquitto.org'
 port = 1883
 client_lock = threading.Lock() # Lock for safe access to MQTT clients in multi-threading
 running = True  # Global flag to indicate whether the application is running
