@@ -108,7 +108,7 @@ def on_message(client, userdata, message):
     print(f"Received message {message.payload.decode()} from topic {message.topic} using client {client._client_id.decode()}")
 
 
-def covert_publish(client, topic, message, payload, qos, method):
+def covert_publish(client, topic, message, payload, qos, method, delay):
     """Publish covert messages by encoding them in the topic name based on the given method."""
     attack_bits = ''.join(format(ord(char), '08b') for char in message) # Convert covert message to binary
 
@@ -118,7 +118,7 @@ def covert_publish(client, topic, message, payload, qos, method):
             break
         new_topic = embed_message(topic, chunk, method=method) # Embed covert bit in the topic based on the method
         publish_message(client, new_topic, qos, payload)
-        time.sleep(1) # Small delay for covert channel timing
+        time.sleep(delay) # Delay equal to period
 
 
 def embed_message(current_topic, message_chunk, method):
@@ -163,7 +163,7 @@ def periodic_publisher(client, row):
 
     while running:
         if device_type == 'counterfeit' and covert_message:
-            covert_publish(client, topic, covert_message, payload, qos, embedding_method)
+            covert_publish(client, topic, covert_message, payload, qos, embedding_method, period)
         else:
             publish_message(client, topic, qos, payload)
         time.sleep(period) # Delay of period before the next publish cycle to publish at regular intervals
@@ -203,7 +203,7 @@ def event_publisher(client, row):
             period = np.random.uniform(min_range, max_range) if min_range is not None and max_range is not None else 1
 
         if device_type == 'counterfeit' and covert_message:
-            covert_publish(client, topic, covert_message, payload, qos, embedding_method)
+            covert_publish(client, topic, covert_message, payload, qos, embedding_method, period)
         else:
             publish_message(client, topic, qos, payload)
         time.sleep(period)
