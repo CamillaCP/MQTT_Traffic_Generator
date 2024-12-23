@@ -1,0 +1,6 @@
+﻿Topic;Type;QoS;Payload;Period;MinRange;MaxRange;Distribution;DeviceType;HiddenMessage;EmbeddingMethod;NumClients;Duration;Role
+home/kitchen/temperature;periodic;1;"{""temp"":22.5}";10;;;;legit;;;;;publisher
+home/garden/motion;event;0;"{""motion"":yes}";2;8;normal;;;;;;;publisher
+home/kitchen/humidity;periodic;2;"{""humidity"":25.5%}";4;;;;counterfeit;secret;case;;;publisher
+home/kitchen/humidity;periodic;2;"{""humidity"":25.5%}";4;;;;counterfeit;secret;case;;;publisher
+home/garden/light;periodic;2;"{""light_status"": off}";0.05;;;;counterfeit;;;5;5;dos_attack

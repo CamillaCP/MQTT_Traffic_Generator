@@ -112,9 +112,15 @@ $ python3 generator.py [-h HELP] [--pcap PCAP]
 ```
 where ```--pcap PCAP```  specifies the path to the PCAP file to use for traffic replay.
 
+## Docker Image
 
+The command line version of the traffic generator is also available as a Docker image, which can built with:
+```
+$ docker build -t generator-app .
+```
 
-
-
-
-
+To launch the tool: 
+```
+docker run -it --rm -v "$(pwd):/app" generator-app python3 generator.py --csv test.csv
+```
+where ```--csv test.csv``` specifies the CSV file containing simulation details. The ```test.csv``` is provided as well and contains a minimal configuraion that can be used as a starting template. 
