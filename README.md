@@ -114,7 +114,7 @@ where ```--pcap PCAP```  specifies the path to the PCAP file to use for traffic 
 
 ## Docker Image
 
-The command line version of the traffic generator is also available as a Docker image, which can built with:
+The command line version of the traffic generator is also available as a Docker image, which can be built with:
 ```
 $ docker build -t generator-app .
 ```
